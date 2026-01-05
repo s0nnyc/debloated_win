@@ -1,11 +1,12 @@
-# debloated_win
-Minimalistic Win 10 Business. Used for games not properly running on Linux
+# Minimalistic Win 10 Business. Used for games not properly running on Linux
 
-Get a windows 10 Business 22H2 from massgrave.dev
+## Download
 
-Activate via powershell
+Get a windows 10 Business 22H2 from massgrave.dev. I've tried LTSC versions, but they are almost impossible to activate and I ran into multiple problems when trying to install it from the stick
 
+[https://massgrave.dev/windows_10_links](https://massgrave.dev/windows_10_links)
 
+## Activate
 
 Open PowerShell
 1. Click the Start Menu, type PowerShell, then open it.
@@ -35,6 +36,8 @@ Older versions of Windows will require running this command beforehand:
 - PowerShell as Administrator
 
 ## 1. AppX removal (core ballast)
+
+Open PowerShell as administrator
 
 ```powershell
 $remove = @(
@@ -72,7 +75,7 @@ foreach ($pkg in $remove) {
     Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
 }
 ```
-Re-verification (must be clean)
+Verification (must be clean)
 ```powershell
 Get-AppxPackage -AllUsers |
 Where-Object {
@@ -86,7 +89,7 @@ Where-Object {
 }
 ```
 
-###Note
+### Note
 You might get 1 or 2 errors - GetHelp and Pictures not getting deleted
 
 
@@ -133,18 +136,18 @@ Disable **entire folders**:
 - Microsoft → Windows → Windows Error Reporting
 
 
-## 5. Group Policy hardening (gpedit.msc)
-
-# Windows 10 / 11 – Noise Reduction Policy Set (Business)
+## 5. Group Policy hardening (thru gpedit.msc)
 
 ## CONSUMER NOISE
 
 ### Disable consumer experiences
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
-→ Windows Components  
-→ Cloud Content  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Cloud Content
+```
 
 **Policy**  
 Turn off Microsoft consumer experiences  
@@ -154,20 +157,14 @@ Enabled
 
 ---
 
-### Windows Tips
-No separate policy in Business editions.
-
-**Covered by**  
-Turn off Microsoft consumer experiences = Enabled  
-
----
-
 ### Advertising ID
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → System  
-  → User Profiles  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ System
+      └─ User Profiles
+```
 
 **Policy**  
 Turn off the advertising ID  
@@ -178,11 +175,13 @@ Enabled
 ---
 
 ### Tailored experiences
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Cloud Content  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Cloud Content
+```
 
 **Policy**  
 Turn off tailored experiences  
@@ -195,11 +194,13 @@ Enabled
 ## CORTANA / SEARCH
 
 ### Allow Cortana
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Search  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Search
+```
 
 **Policy**  
 Allow Cortana  
@@ -210,11 +211,13 @@ Disabled
 ---
 
 ### Web search (Bing in Start)
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Search  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Search
+```
 
 **Policies**  
 - Do not allow web search  
@@ -226,11 +229,13 @@ Both = Enabled
 ---
 
 ### Search highlights
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Search  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Search
+```
 
 **Policy**  
 Allow search highlights  
@@ -240,14 +245,16 @@ Disabled
 
 ---
 
-## WIDGETS / NEWS
+## NEWS
 
-### Widgets
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → News and interests
+### News and interests
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ News and interests
+```
 
 **Policy**  
 Enable news and interests on the taskbar
@@ -255,18 +262,18 @@ Enable news and interests on the taskbar
 **Setting**  
 Disabled  
 
-*Effect:* Disables Widgets and News & Interests  
-
 ---
 
 ## WINDOWS UPDATE
 
 ### Configure Automatic Updates
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Windows Update  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Windows Update
+```
 
 **Policy**  
 Configure Automatic Updates  
@@ -280,12 +287,14 @@ Enabled
 ---
 
 ### Feature Updates deferral
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Windows Update  
-   → Windows Update for Business  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Windows Update
+         └─ Windows Update for Business
+```
 
 **Policy**  
 Select when Preview Builds and Feature Updates are received  
@@ -299,12 +308,14 @@ Enabled
 ---
 
 ### Quality Updates deferral
-**Path**  
-Computer Configuration  
-→ Administrative Templates  
- → Windows Components  
-  → Windows Update  
-   → Windows Update for Business  
+**Path**
+```
+Computer Configuration
+└─ Administrative Templates
+   └─ Windows Components
+      └─ Windows Update
+         └─ Windows Update for Business
+```
 
 **Policy**  
 Select when Quality Updates are received  
@@ -345,3 +356,38 @@ News & interests → Off
 Start Menu:
 Remove all tiles
 Disable suggestions
+
+
+## 8. Drivers discipline
+
+Install only:
+
+- Chipset
+- GPU
+- Network
+
+Avoid:
+- OEM control suites
+- RGB software
+- Audio enhancers unless required
+
+
+## 9. Optional but recommended (clean ISO)
+
+Use NTLite:
+
+- Remove Store (policy-safe in Business)
+- Remove Edge WebView (if no Store/UWP)
+- Remove handwriting, speech, OCR
+- Strip legacy media features
+- Keep .NET, WMI, PowerShell
+
+
+## Resulting system state
+
+- Idle RAM: ~1.8–2.2 GB
+- Zero consumer apps
+- Minimal background telemetry
+- Predictable updates
+- Stable for dev, VM, gaming, tooling
+- This is the maximum practical debloat for Windows 10 Business without breaking servicing or enterprise features.
